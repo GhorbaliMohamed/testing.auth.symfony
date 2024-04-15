@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Login</title>
+  </head>
+<body>
+{% if error %}
+    <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+    {% endif %}
+    {% if app.user %}
+    <div class="mb-3">
+        You are logged in as {{ app.user.username }}, <a href="{{ path('app_logout') }}">Logout</a>
+    </div>
+    {% endif %}
+    {% if not app.user %}
+  <h1>Login</h1>
+  <form method="post" action="{{ path('app_login') }}">
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+    <label for="email">Email:</label>
+    <input type="text" value="{{ last_email }}" id="email" name="email" value="{{ last_email }}" required autofocus>
+
+    <label for="password">Password:</label>
+    <input type="password" id="password" name="password" required>
+
+    <input type="submit" value="Login">
+  </form>
+  {% endif %}
+</body>
+</html>
