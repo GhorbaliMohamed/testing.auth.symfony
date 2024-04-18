@@ -1,31 +1,86 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Registration</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>ShopSphere Registration</title>
+  <link rel="icon" type="image/x-icon" href="favicon-32x32.png">
+  <link href="https://fonts.googleapis.com/css?family=Karla:400,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.materialdesignicons.com/4.8.95/css/materialdesignicons.min.css">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="userlogin/assets/css/login.css">
 </head>
 <body>
-  <div class="pt-4 pb-2">
-    <h5 class="card-title text-center pb-0 fs-4">Create an Account</h5>
-    <p class="text-center small">Enter your personal details to create account</p>
+  {% if app.user %}
+  <div class="mb-3">
+    You are logged in as {{ app.user.username }}, <a href="{{ path('app_logout') }}">Logout</a>
   </div>
-  <form method="post" novalidate>
-    {{ form_widget(form) }} 
-    <div class="col-12">
-      <div class="form-check">
-        <input class="form-check-input" name="terms" type="checkbox" value="" id="acceptTerms" required>
-        <label class="form-check-label" for="acceptTerms">I agree and accept the <a href="#">terms and conditions</a></label>
-        <div class="invalid-feedback">You must agree before submitting.</div>
+  {% endif %}
+
+  {% if not app.user %}
+  <main class="d-flex align-items-center min-vh-100 py-3 py-md-0">
+    <div class="container">
+      <div class="card login-card">
+        <div class="row no-gutters">
+          <div class="col-md-5">
+            <img src="userlogin/assets/images/register.jpg" alt="login" class="login-card-img">
+          </div>
+          <div class="col-md-7">
+            <div class="card-body">
+              <div class="brand-wrapper">
+                <a href="/">
+                  <img src="userlogin/assets/images/blacklogo.png" alt="logo" class="logo">
+                </a>
+              </div>
+              <p class="login-card-description">Create an account</p>
+              <form method="post" novalidate>
+              {{ form_widget(form._token) }}
+                <div class="form-group">
+                  <label for="nom" class="sr-only">Nom</label>
+                  {{ form_row(form.nom, {'attr': {'class': 'form-control', 'placeholder': 'Nom', 'required': 'required', 'autofocus': 'autofocus'}}) }}
+                </div>
+                <div class="form-group">
+                  <label for="prenom" class="sr-only">Prénom</label>
+                  {{ form_row(form.prenom, {'attr': {'class': 'form-control', 'placeholder': 'Prénom', 'required': 'required'}}) }}
+                </div>
+                <div class="form-group">
+                  <label for="email" class="sr-only">Email</label>
+                  {{ form_row(form.email, {'attr': {'class': 'form-control', 'placeholder': 'Email address', 'required': 'required'}}) }}
+                </div>
+                <div class="form-group">
+                  <label for="password" class="sr-only">Password</label>
+                  {{ form_row(form.password.first, {'attr': {'class': 'form-control', 'placeholder': 'Password', 'required': 'required'}}) }}
+                </div>
+                <div class="form-group">
+                  <label for="password_second" class="sr-only">Confirm Password</label>
+                  {{ form_row(form.password.second, {'attr': {'class': 'form-control', 'placeholder': 'Confirm Password', 'required': 'required'}}) }}
+                </div>
+                <div class="form-group">
+                  <label for="telephone" class="sr-only">Téléphone</label>
+                  {{ form_row(form.telephone, {'attr': {'class': 'form-control', 'placeholder': 'Téléphone', 'required': 'required'}}) }}
+                </div>
+                <div class="form-group">
+                  <label for="adresse" class="sr-only">Adresse</label>
+                  {{ form_row(form.adresse, {'attr': {'class': 'form-control', 'placeholder': 'Adresse', 'required': 'required'}}) }}
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" name="terms" type="checkbox" value="" id="acceptTerms" required>
+                  <label class="form-check-label" for="acceptTerms">I agree and accept the <a href="#">terms and conditions</a></label>
+                  <div class="invalid-feedback">You must agree before submitting.</div>
+                </div>
+                <button class="btn btn-primary w-100 mt-3" type="submit">Create Account</button>
+                <p class="small mt-3">Already have an account? <a href="/login" class="text-reset">Log in here</a></p>
+              </form>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-
-    <div class="col-12">
-      <button class="btn btn-primary w-100" type="submit">Create Account</button>
-    </div>
-
-    <div class="col-12">
-      <p class="small mb-0">Already have an account? <a href="pages-login.html">Log in</a></p>
-    </div>
-  </form>
+  </main>
+  {% endif %}
+  <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
 </body>
 </html>

@@ -5,6 +5,7 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Entity]
 #[ORM\Table(name: 'utilisateur', uniqueConstraints: [new ORM\UniqueConstraint(name: 'email', columns: ['email'])])]
 class Utilisateur implements UserInterface,PasswordAuthenticatedUserInterface
@@ -15,27 +16,42 @@ class Utilisateur implements UserInterface,PasswordAuthenticatedUserInterface
     private ?int $id = null;
 
     #[ORM\Column(name: 'nom', type: 'string', length: 255, nullable: false)]
+    #[Assert\NotBlank]
+    #[Assert\Length(min: 1, max: 50)]
+    #[Assert\Type('string')]
     private ?string $nom = null;
 
     #[ORM\Column(name: 'prenom', type: 'string', length: 255, nullable: false)]
+    #[Assert\NotBlank]
+    #[Assert\Length(min: 1, max: 50)]
+    #[Assert\Type('string')]
     private ?string $prenom = null;
 
     #[ORM\Column(name: 'email', type: 'string', length: 255, nullable: false)]
+    #[Assert\NotBlank]
+    #[Assert\Email]
     private ?string $email = null;
 
     #[ORM\Column(name: 'password', type: 'string', length: 256, nullable: false)]
     private ?string $password = null;
 
     #[ORM\Column(name: 'telephone', type: 'string', length: 20, nullable: true)]
+    #[Assert\Regex(pattern: '/^\d+$/', message: 'Le numéro de téléphone doit contenir uniquement des chiffres.')]
+    #[Assert\Length(min: 10, max: 15)]
     private ?string $telephone = null;
 
     #[ORM\Column(name: 'image', type: 'string', length: 250, nullable: false, options: ['default' => 'default.jpg'])]
     private ?string $image = 'default.jpg';
 
     #[ORM\Column(name: 'adresse', type: 'string', length: 255, nullable: true)]
+    #[Assert\Length(min: 1, max: 100)]
+    #[Assert\Type('string')]
     private ?string $adresse = null;
 
     #[ORM\Column(name: 'role', type: 'string', length: 0, nullable: false)]
+    #[Assert\NotBlank]
+    #[Assert\Length(min: 1, max: 50)]
+    #[Assert\Type('string')]
     private ?string $role = null;
 
     public function getId(): ?int
@@ -87,9 +103,11 @@ class Utilisateur implements UserInterface,PasswordAuthenticatedUserInterface
     public function setPassword(string $password): static
     {
         $this->password = $password;
-
+    
         return $this;
     }
+    
+    
 
     public function getTelephone(): ?string
     {
@@ -170,9 +188,12 @@ class Utilisateur implements UserInterface,PasswordAuthenticatedUserInterface
     }
     public function getRoles(): array
     {
-        
         // guarantee every user at least has ROLE_USER
-        $roles[] = 'ROLE_USER';
+        if($this->role == 'Admin'){
+            $roles = ['ROLE_Admin'];
+        }else{
+            $roles = ['ROLE_USER'];
+        }
 
         return array_unique($roles);
     }

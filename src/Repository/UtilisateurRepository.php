@@ -35,7 +35,21 @@ class UtilisateurRepository extends ServiceEntityRepository
         ;
     }
     */
-
+    /*
+    public function getPhoneNumber($email)
+        {
+        $user = $this->findOneBy(['email' => $email]);
+        if ($user) {
+            return $user->getPhoneNumber();
+        } else {
+            return null; // Or throw an exception if phone number retrieval is crucial
+        }
+        }
+*/
+    public function findAllOrdered(string $orderBy, string $orderDirection): array
+    {
+        return $this->findBy([], [$orderBy => $orderDirection]);
+    }
     /*
     public function findOneBySomeField($value): ?User
     {

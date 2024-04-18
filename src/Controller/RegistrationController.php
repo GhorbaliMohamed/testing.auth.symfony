@@ -24,7 +24,7 @@ class RegistrationController extends AbstractController
     public function index(Request $request)
     {
         $user = new Utilisateur();
-
+        $user->setRole("User");
         $form = $this->createForm(UtilisateurType::class, $user);
 
         $form->handleRequest($request);
@@ -38,7 +38,7 @@ class RegistrationController extends AbstractController
             );
             $user->setPassword($hashedPassword);
             // Set their role
-            $user->setRole("User");
+            
 
             // Save
             $em = $this->getDoctrine()->getManager();

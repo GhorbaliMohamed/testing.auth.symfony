@@ -1,0 +1,45 @@
+{% include "back/base.html.twig" %}
+
+{% block inside %}
+<div class="col-12 grid-margin stretch-card">
+<div class="card">
+<div class="card-body d-flex">
+<div class="col-md-6">
+<h4 class="card-title">User Information</h4>
+<p class="card-description">
+Your account information
+</p>
+<div class="form-group">
+<label for="exampleInputNom1" class="font-weight-bold">Nom:</label>
+<p id="exampleInputNom1" class="mb-0 font-size-16">{{ app.user.getNom() }}</p>
+</div>
+<div class="form-group">
+<label for="exampleInputPrenom" class="font-weight-bold">Prenom:</label>
+<p id="exampleInputPrenom1" class="mb-0 font-size-16">{{ app.user.getPrenom() }}</p>
+</div>
+<div class="form-group">
+<label for="exampleInputEmail3" class="font-weight-bold">Email address:</label>
+<p id="exampleInputEmail3" class="mb-0 font-size-16">{{ app.user.getEmail() }}</p>
+</div>
+<div class="form-group">
+<label for="exampleInputTelephone" class="font-weight-bold">Telephone:</label>
+<p id="exampleInputTelephone1" class="mb-0 font-size-16">{{ app.user.getTelephone() }}</p>
+</div>
+<div class="form-group">
+<label for="exampleInputAddresse1" class="font-weight-bold">Addresse:</label>
+<p id="exampleInputAddresse1" class="mb-0 font-size-16">{{ app.user.getAdresse() }}</p>
+</div>
+</div>
+<div class="col-md-6 d-flex justify-content-center align-items-center">
+{% if app.user.getImage() %}
+<img src="{{ asset('../uploads/' ~ app.user.getImage()) }}" alt="{{ app.user.getNom() }}" class="img-fluid rounded-circle" style="max-width: 200px;">
+{% else %}
+<i class="mdi mdi-account-circle" style="font-size: 200px;"></i>
+{% endif %}
+</div>
+</div>
+</div>
+</div>
+{% endblock %}
+
+{% include "back/base2.html.twig" %}

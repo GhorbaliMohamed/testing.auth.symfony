@@ -1,0 +1,90 @@
+{% include "back/base.html.twig" %}
+
+{% block inside %}
+ <div class="col-lg-12 grid-margin stretch-card">
+              <div class="card">
+                <div class="card-body">
+                  <h4 class="card-title">Users</h4>
+                  <p class="card-description">
+                    All The Users Information
+                  </p>
+                  <div class="table-responsive">
+                    <table class="table table-striped">
+                      <thead>
+                        <tr>
+                          <th>
+                            User
+                          </th>
+                          <th>
+                                <a href="{{ path('app_admin_users', {'orderBy': 'nom', 'orderDirection': orderBy == 'nom' and orderDirection == 'ASC' ? 'DESC' : 'ASC'}) }}">
+                                    Nom
+                                    {% if orderBy == 'nom' %}
+                                        <i class="mdi mdi-arrow-{% if orderDirection == 'ASC' %}up{% else %}down{% endif %}"></i>
+                                    {% endif %}
+                                </a>
+                            </th>
+                          <th>
+                                <a href="{{ path('app_admin_users', {'orderBy': 'prenom', 'orderDirection': orderBy == 'prenom' and orderDirection == 'ASC' ? 'DESC' : 'ASC'}) }}">
+                                    Prenom
+                                    {% if orderBy == 'prenom' %}
+                                        <i class="mdi mdi-arrow-{% if orderDirection == 'ASC' %}up{% else %}down{% endif %}"></i>
+                                    {% endif %}
+                                </a>
+                            </th>
+                          <th>
+                                <a href="{{ path('app_admin_users', {'orderBy': 'email', 'orderDirection': orderBy == 'email' and orderDirection == 'ASC' ? 'DESC' : 'ASC'}) }}">
+                                    Email
+                                    {% if orderBy == 'email' %}
+                                        <i class="mdi mdi-arrow-{% if orderDirection == 'ASC' %}up{% else %}down{% endif %}"></i>
+                                    {% endif %}
+                                </a>
+                            </th>
+                          <th>
+                                <a href="{{ path('app_admin_users', {'orderBy': 'role', 'orderDirection': orderBy == 'role' and orderDirection == 'ASC' ? 'DESC' : 'ASC'}) }}">
+                                    Role
+                                    {% if orderBy == 'role' %}
+                                        <i class="mdi mdi-arrow-{% if orderDirection == 'ASC' %}up{% else %}down{% endif %}"></i>
+                                    {% endif %}
+                                </a>
+                           </th>
+                          <th>
+                                <a href="{{ path('app_admin_users', {'orderBy': 'telephone', 'orderDirection': orderBy == 'telephone' and orderDirection == 'ASC' ? 'DESC' : 'ASC'}) }}">
+                                    Telephone
+                                    {% if orderBy == 'telephone' %}
+                                        <i class="mdi mdi-arrow-{% if orderDirection == 'ASC' %}up{% else %}down{% endif %}"></i>
+                                    {% endif %}
+                                </a>
+                           </th>
+                          <th>
+                                <a href="{{ path('app_admin_users', {'orderBy': 'adresse', 'orderDirection': orderBy == 'adresse' and orderDirection == 'ASC' ? 'DESC' : 'ASC'}) }}">
+                                    Addresse
+                                    {% if orderBy == 'adresse' %}
+                                        <i class="mdi mdi-arrow-{% if orderDirection == 'ASC' %}up{% else %}down{% endif %}"></i>
+                                    {% endif %}
+                                </a>
+                           </th>
+                           
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {% for user in users %}
+                            <tr>
+                                <td class="py-1">
+                                    <img src="{{ asset('uploads/' ~ user.image) }}" alt="image"/>                                </td>
+                                <td>{{ user.nom }}</td>
+                                <td>{{ user.prenom }}</td>
+                                <td>{{ user.email }}</td>
+                                <td>{{ user.role }}</td>
+                                <td>+216 {{ user.telephone }}</td>
+                                <td>{{ user.adresse }}</td>
+                            </tr>
+                        {% endfor %}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+{% endblock %}
+
+{% include "back/base2.html.twig" %}

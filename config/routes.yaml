@@ -2,3 +2,14 @@
 #    path: /
 #    controller: App\Controller\DefaultController::index
 
+
+app_terms_of_use:
+    path: /terms-of-use
+    controller: Symfony\Bundle\FrameworkBundle\Controller\TemplateController
+    defaults:
+        template: 'Termsofuse.html.twig'
+app_privacy_policy:
+    path: /privacy-policy
+    controller: Symfony\Bundle\FrameworkBundle\Controller\TemplateController
+    defaults:
+        template: 'Privacypolicy.html.twig'

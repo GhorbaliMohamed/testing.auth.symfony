@@ -3,16 +3,13 @@ security:
     # https://symfony.com/doc/current/security.html#registering-the-user-hashing-passwords
     password_hashers:
         Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'auto'
-    # https://symfony.com/doc/current/security.html#loading-the-user-the-user-provider
-    encoders:
-        App\Entity\Utilisateur:
-            algorithm: auto
     providers:
         # used to reload user from session & other features (e.g. switch_user)
         app_user_provider:
             entity:
                 class: App\Entity\Utilisateur
                 property: email
+        
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
@@ -20,22 +17,33 @@ security:
         main:
             lazy: true
             provider: app_user_provider
-            custom_authenticator: App\Security\LoginFormAuthenticator
+            entry_point: App\Security\LoginFormAuthenticator
+            custom_authenticator:
+                - App\Security\LoginFormAuthenticator
+                - App\Security\AdminLoginFormAuthenticator
             logout:
                 path: app_logout
                 target: /
                 # where to redirect after logout
                 # target: app_any_route
-
             remember_me:
                 secret: '%kernel.secret%'
                 lifetime: 604800
                 path: /
                 always_remember_me: true
-
+            context: my_context
+        admin:
+            lazy: true
+            provider: app_user_provider
+            entry_point: App\Security\AdminLoginFormAuthenticator
+            custom_authenticator:
+                - App\Security\AdminLoginFormAuthenticator
+            logout:
+                path: app_logout
+                target: /admin/login
+            context: my_context
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#the-firewall
-
             # https://symfony.com/doc/current/security/impersonating_user.html
             # switch_user: true
 
@@ -43,12 +51,17 @@ security:
     # Note: Only the *first* access control that matches will be used
     access_control:
         # - { path: ^/admin, roles: ROLE_ADMIN }
+        - { path: ^/admin/dashboard, roles: 'ROLE_Admin' }
+        - { path: ^/admin/settings, roles: 'ROLE_Admin' }
+        - { path: ^/admin/users, roles: 'ROLE_Admin' }
+        - { path: ^/admin/changepassword, roles: 'ROLE_Admin' }
+        - { path: ^/admin/profile, roles: 'ROLE_Admin' }
         # - { path: ^/profile, roles: ROLE_USER }
 
 when@test:
-  security:
-    password_hashers:
-      Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface:
-        algorithm: auto
-        cost: 15
-      App\Entity\Utilisateur: auto  # Adjust cost for tests
+    security:
+        password_hashers:
+            Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface:
+                algorithm: auto
+                cost: 15
+            App\Entity\Utilisateur: auto  # Adjust cost for tests
