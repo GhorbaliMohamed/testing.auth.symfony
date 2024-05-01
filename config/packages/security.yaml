@@ -51,11 +51,7 @@ security:
     # Note: Only the *first* access control that matches will be used
     access_control:
         # - { path: ^/admin, roles: ROLE_ADMIN }
-        - { path: ^/admin/dashboard, roles: 'ROLE_Admin' }
-        - { path: ^/admin/settings, roles: 'ROLE_Admin' }
-        - { path: ^/admin/users, roles: 'ROLE_Admin' }
-        - { path: ^/admin/changepassword, roles: 'ROLE_Admin' }
-        - { path: ^/admin/profile, roles: 'ROLE_Admin' }
+        - { path: ^/mainadmin, roles: 'ROLE_Admin' }
         # - { path: ^/profile, roles: ROLE_USER }
 
 when@test:

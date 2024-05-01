@@ -1,0 +1,45 @@
+{% include "back/base.html.twig" %}
+
+{% block inside %}
+  <div class="col-12 grid-margin stretch-card">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title">Edit User</h4>
+        <p class="card-description">
+          Update your account information
+        </p>
+        {{ form_start(form, {'attr': {'class': 'forms-sample'}}) }}
+          <div class="form-group">
+            {{ form_label(form.nom, 'Nom') }}
+            {{ form_widget(form.nom, {'attr': {'class': 'form-control'}}) }}
+            {{ form_errors(form.nom) }}
+          </div>
+          <div class="form-group">
+            {{ form_label(form.prenom, 'Prenom') }}
+            {{ form_widget(form.prenom, {'attr': {'class': 'form-control'}}) }}
+            {{ form_errors(form.prenom) }}
+          </div>
+          <div class="form-group">
+            {{ form_label(form.email, 'Email address') }}
+            {{ form_widget(form.email, {'attr': {'class': 'form-control'}}) }}
+            {{ form_errors(form.email) }}
+          </div>
+          <div class="form-group">
+            {{ form_label(form.telephone, 'Telephone') }}
+            {{ form_widget(form.telephone, {'attr': {'class': 'form-control'}}) }}
+            {{ form_errors(form.telephone) }}
+          </div>
+          <div class="form-group">
+            {{ form_label(form.adresse, 'Addresse') }}
+            {{ form_widget(form.adresse, {'attr': {'class': 'form-control'}}) }}
+            {{ form_errors(form.adresse) }}
+          </div>
+          <button type="submit" class="btn btn-primary mr-2">Submit</button>
+          <a href="{{ path('app_admin_users') }}" class="btn btn-light">Cancel</a>
+        {{ form_end(form) }}
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% include "back/base2.html.twig" %}

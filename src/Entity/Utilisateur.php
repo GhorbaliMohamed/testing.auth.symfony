@@ -17,14 +17,16 @@ class Utilisateur implements UserInterface,PasswordAuthenticatedUserInterface
 
     #[ORM\Column(name: 'nom', type: 'string', length: 255, nullable: false)]
     #[Assert\NotBlank]
-    #[Assert\Length(min: 1, max: 50)]
+    #[Assert\Length(min: 4, max: 50)]
     #[Assert\Type('string')]
+    #[Assert\Regex(pattern: '/^[a-zA-Z\s]+$/', message: 'The name must contain only letters and spaces.')]
     private ?string $nom = null;
 
     #[ORM\Column(name: 'prenom', type: 'string', length: 255, nullable: false)]
     #[Assert\NotBlank]
-    #[Assert\Length(min: 1, max: 50)]
+    #[Assert\Length(min: 4, max: 50)]
     #[Assert\Type('string')]
+    #[Assert\Regex(pattern: '/^[a-zA-Z\s]+$/', message: 'The name must contain only letters and spaces.')]
     private ?string $prenom = null;
 
     #[ORM\Column(name: 'email', type: 'string', length: 255, nullable: false)]
@@ -37,7 +39,7 @@ class Utilisateur implements UserInterface,PasswordAuthenticatedUserInterface
 
     #[ORM\Column(name: 'telephone', type: 'string', length: 20, nullable: true)]
     #[Assert\Regex(pattern: '/^\d+$/', message: 'Le numéro de téléphone doit contenir uniquement des chiffres.')]
-    #[Assert\Length(min: 10, max: 15)]
+    #[Assert\Length(min: 8, max: 15)]
     private ?string $telephone = null;
 
     #[ORM\Column(name: 'image', type: 'string', length: 250, nullable: false, options: ['default' => 'default.jpg'])]

@@ -8,6 +8,14 @@
                   <p class="card-description">
                     All The Users Information
                   </p>
+                  <div class="d-flex justify-content-between mb-3">
+                    <form action="{{ path('app_admin_users') }}" method="GET" class="form-inline">
+                      <div class="form-group mr-2">
+                        <input type="text" class="form-control" name="search" placeholder="Search..." value="{{ app.request.get('search') }}">
+                      </div>
+                      <button type="submit" class="btn btn-primary">Search</button>
+                    </form>
+                  </div>
                   <div class="table-responsive">
                     <table class="table table-striped">
                       <thead>
@@ -63,7 +71,9 @@
                                     {% endif %}
                                 </a>
                            </th>
-                           
+                           <th> 
+                           Actions
+                           </th>
                         </tr>
                       </thead>
                       <tbody>
@@ -77,6 +87,10 @@
                                 <td>{{ user.role }}</td>
                                 <td>+216 {{ user.telephone }}</td>
                                 <td>{{ user.adresse }}</td>
+                                <td>
+                                <a href="{{ path('app_admin_user_edit', {'id': user.id}) }}" class="btn btn-primary btn-sm">Edit</a>
+                                <a href="{{ path('app_admin_user_delete', {'id': user.id}) }}" class="btn btn-danger btn-sm">Delete</a>
+                                </td>
                             </tr>
                         {% endfor %}
                       </tbody>

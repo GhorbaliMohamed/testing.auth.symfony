@@ -1,9 +1,8 @@
 <?php
 namespace App\Controller;
 
-use App\Entity\User;
+
 use App\Entity\Utilisateur;
-use App\Form\UserType;
 use App\Form\UtilisateurType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;

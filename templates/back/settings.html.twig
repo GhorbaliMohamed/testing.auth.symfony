@@ -1,51 +1,44 @@
 {% include "back/base.html.twig" %}
 
 {% block inside %}
-            <div class="col-12 grid-margin stretch-card">
-              <div class="card">
-                <div class="card-body">
-                  <h4 class="card-title">Settings</h4>
-                  <p class="card-description">
-                    Change you account Information
-                  </p>
-                  <form class="forms-sample">
-                    <div class="form-group">
-                      <label for="exampleInputNom1">Nom</label>
-                      <input type="text" class="form-control" id="exampleInputNom1" value="{{app.user.getNom()}}">
-                    </div>
-                    <div class="form-group">
-                      <label for="exampleInputPrenom">Prenom</label>
-                      <input type="text" class="form-control" id="exampleInputPrenom1" value="{{app.user.getPrenom()}}">
-                    </div>
-                    <div class="form-group">
-                      <label for="exampleInputEmail3">Email address</label>
-                      <input type="email" class="form-control" id="exampleInputEmail3" value="{{app.user.getEmail()}}">
-                    </div>
-                    <div class="form-group">
-                      <label for="exampleInputTelephone">Telephone</label>
-                      <input type="text" class="form-control" id="exampleInputTelephone1" value="{{app.user.getTelephone()}}">
-                    </div>
-                    <div class="form-group">
-                      <label>File upload</label>
-                      <input type="file" name="img[]" class="file-upload-default">
-                      <div class="input-group col-xs-12">
-                        <input type="text" class="form-control file-upload-info" disabled placeholder="Upload Image">
-                        <span class="input-group-append">
-                          <button class="file-upload-browse btn btn-primary" type="button">Upload</button>
-                        </span>
-                      </div>
-                    </div>
-                    <div class="form-group">
-                      <label for="exampleInputAddresse1">Addresse</label>
-                      <input type="text" class="form-control" id="exampleInputAddresse1" value="{{app.user.getAdresse()}}">
-                    </div>
-                    <button type="submit" class="btn btn-primary mr-2">Submit</button>
-                    <button class="btn btn-light">Cancel</button>
-                  </form>
+    <div class="col-12 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Settings</h4>
+                <p class="card-description">
+                    Change your account information
+                </p>
+                {{ form_start(form, {'attr': {'id': 'change-profile-form'}}) }}
+                <div class="form-group">
+                    {{ form_label(form.nom, 'Nom') }}
+                    {{ form_widget(form.nom, {'attr': {'class': 'form-control'}}) }}
                 </div>
-              </div>
+                <div class="form-group">
+                    {{ form_label(form.prenom, 'Prénom') }}
+                    {{ form_widget(form.prenom, {'attr': {'class': 'form-control'}}) }}
+                </div>
+                <div class="form-group">
+                    {{ form_label(form.email, 'Email') }}
+                    {{ form_widget(form.email, {'attr': {'class': 'form-control'}}) }}
+                </div>
+                <div class="form-group">
+                    {{ form_label(form.telephone, 'Téléphone') }}
+                    {{ form_widget(form.telephone, {'attr': {'class': 'form-control'}}) }}
+                </div>
+                <div class="form-group">
+                    {{ form_label(form.adresse, 'Adresse') }}
+                    {{ form_widget(form.adresse, {'attr': {'class': 'form-control'}}) }}
+                </div>
+                <div class="form-group">
+                    {{ form_label(form.image, 'Photo') }}
+                    {{ form_widget(form.image) }}
+                </div>
+                <button type="submit" class="btn btn-primary mr-2">Submit</button>
+                <a href="{{ path('app_admin_profile') }}" class="btn btn-light">Cancel</a>
+                {{ form_end(form) }}
             </div>
-
+        </div>
+    </div>
 {% endblock %}
 
 {% include "back/base2.html.twig" %}

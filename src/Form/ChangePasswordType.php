@@ -4,36 +4,36 @@ namespace App\Form;
 
 use App\Entity\Utilisateur;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
-use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 
 class ChangePasswordType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-        ->add('password', PasswordType::class, [
-            'label' => 'Old Password',
-            'constraints' => [
-                new NotBlank(['message' => 'Please enter your old password']),
-            ],
-        ])
-        ->add('password', PasswordType::class, [
-            'label' => 'New Password',
-            'constraints' => [
-                new NotBlank(['message' => 'Please enter a new password']),
-                new Length(['min' => 6, 'minMessage' => 'Your password should be at least {{ limit }} characters']),
-            ],
-        ])
-        ->add('password', PasswordType::class, [
-            'label' => 'Confirm New Password',
-            'constraints' => [
-                new NotBlank(['message' => 'Please confirm your new password']),
-            ],
-        ]);
+            ->add('oldPassword', PasswordType::class, [
+                'label' => 'Old Password',
+                'mapped' => false,
+                'constraints' => [
+                    new NotBlank(),
+                ],
+            ])
+            ->add('newPassword', RepeatedType::class, [
+                'type' => PasswordType::class,
+                'invalid_message' => 'The password fields must match.',
+                'options' => ['attr' => ['class' => 'password-field']],
+                'required' => true,
+                'first_options'  => ['label' => 'New Password'],
+                'second_options' => ['label' => 'Confirm New Password'],
+                'mapped' => false,
+                'constraints' => [
+                    new NotBlank(),
+                ],
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void
