@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Controller;
-
+use ReCaptcha\ReCaptcha;
 use App\Entity\Utilisateur;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -21,19 +21,30 @@ class SecurityController extends AbstractController
         ]);
     }
 
-    #[Route(path: '/login', name: 'app_login')]
+    #[Route(path: '/login', name: 'app_login', methods: ['GET', 'POST'])]
     public function login(Request $request, AuthenticationUtils $authenticationUtils): Response
     {
         // if ($this->getUser()) {
         //     return $this->redirectToRoute('target_path');
         // }
-
+        $recaptcha = new ReCaptcha('6LegF80pAAAAAC_qwlwNqZ5k2xNt9dZP2JrFameb');
         // get the login error if there is one
         $error = $authenticationUtils->getLastAuthenticationError();
         // last username entered by the user
         $lastEmail = $authenticationUtils->getLastUsername();
-
-        return $this->render('security/userlogin.html.twig', ['last_email' => $lastEmail, 'error' => $error]);
+        if ($request->isMethod('POST')) {
+            $recaptchaResponse = $request->request->get('g-recaptcha-response');
+            $recaptchaResult = $recaptcha->verify($recaptchaResponse, $request->getClientIp());
+            if ($recaptchaResult->isSuccess()) {
+                // reCAPTCHA validation passed
+                return $this->redirectToRoute('homepage');
+            } else {
+                // reCAPTCHA validation failed
+                $this->addFlash('error', 'reCAPTCHA validation failed.');
+            }
+        }
+        return $this->render('security/userlogin.html.twig', ['last_email' => $lastEmail, 'error' => $error
+        ,'recaptcha_site_key' => '6LegF80pAAAAAC_qwlwNqZ5k2xNt9dZP2JrFameb']);
     }
 
     #[Route(path: '/logout', name: 'app_logout')]
