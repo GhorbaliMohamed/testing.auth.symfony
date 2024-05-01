@@ -46,7 +46,25 @@ class UtilisateurRepository extends ServiceEntityRepository
         }
         }
 */
+public function countByRole(string $role): int
+    {
+        return $this->createQueryBuilder('u')
+            ->select('COUNT(u)')
+            ->where('u.role = :role')
+            ->setParameter('role', $role)
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
 
+    public function countByAdresse(string $adresse): int
+    {
+        return $this->createQueryBuilder('u')
+            ->select('COUNT(u)')
+            ->where('u.adresse = :adresse')
+            ->setParameter('adresse', $adresse)
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
 public function findAllOrdered(?string $searchQuery, ?string $orderBy, ?string $orderDirection)
 {
     $qb = $this->createQueryBuilder('u');

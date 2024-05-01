@@ -6,7 +6,7 @@ use App\Repository\UtilisateurRepository;
 use App\Form\UtilisateurType;
 use App\Entity\Utilisateur;
 use Symfony\Component\Security\Core\Security;
-
+use Symfony\Component\Process\Process;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -23,6 +23,9 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\TelType;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Process\Exception\ProcessFailedException;
+use Symfony\UX\Chartjs\Builder\ChartBuilderInterface;
+use Symfony\UX\Chartjs\Model\Chart;
 
 class UtilisateurController extends AbstractController
 {
@@ -37,9 +40,28 @@ class UtilisateurController extends AbstractController
     }
 
     #[Route(path: '/mainadmin/dashboard', name: 'app_admin_dashboard')]
-    public function admindhashboard(): Response
+    public function admindhashboard(ChartBuilderInterface $chartBuilder): Response
     {
-        return $this->render('back/dashboard.html.twig');
+        
+
+        $serverLoad = $this->getServerLoad();
+        $memoryUsage = $this->getMemoryUsage();
+        $uptime = $this->getUptime();
+        $numberOfUsers = $this->UtilisateurRepository->countByRole('User');
+        $numberOfAdmins = $this->UtilisateurRepository->countByRole('Admin');
+        $numberOfOthers = $this->UtilisateurRepository->countByRole('fournisseur');
+        $countByAdresse = $this->UtilisateurRepository->countByAdresse('tunisia');
+
+        return $this->render('back/dashboard.html.twig', [
+            'serverLoad' => $serverLoad,
+            'memoryUsage' => $memoryUsage,
+            'uptime' => $uptime,
+            'numberOfUsers' => $numberOfUsers,
+            'numberOfAdmins' => $numberOfAdmins,
+            'numberOfOthers' => $numberOfOthers,
+            'countByAdresse' => $countByAdresse,
+
+        ]);
     }
 
     // AdminController.php
@@ -200,6 +222,94 @@ private function uploadFile(UploadedFile $file): string
             'form' => $form->createView(),
         ]);
     }
+
+
+
+
+
+    public function getServerLoad(): ?float
+    {
+        if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
+            // For Windows systems
+            $process = new Process(['wmic', 'cpu', 'get', 'loadpercentage']);
+            $process->run();
+    
+            if (!$process->isSuccessful()) {
+                throw new ProcessFailedException($process);
+            }
+    
+            $output = trim($process->getOutput());
+    
+            // Extract the load percentage from the output
+            $lines = explode("\n", $output);
+            if (count($lines) > 1) {
+                // Skip the first line (header)
+                return (float)trim($lines[1]);
+            } else {
+                return null;
+            }
+        } else {
+            // For non-Windows systems
+            return null;
+        }
+    }
+    
+    
+
+    public function getMemoryUsage(): ?float
+    {
+        if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
+            // For Windows systems
+            $process = new Process(['wmic', 'OS', 'get', 'FreePhysicalMemory']);
+            $process->run();
+    
+            if (!$process->isSuccessful()) {
+                throw new ProcessFailedException($process);
+            }
+    
+            $output = trim($process->getOutput());
+    
+            // Extract free physical memory from the output
+            $lines = explode("\n", $output);
+            if (count($lines) > 1) {
+                // Skip the first line (header)
+                $memory = (float)trim($lines[1]) / 1024; // Convert to megabytes
+                return $memory;
+            } else {
+                return null;
+            }
+        } else {
+            // For non-Windows systems
+            return null;
+        }
+    }
+    
+
+public function getUptime(): ?string
+{
+    if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
+        // For Windows systems
+        $process = new Process(['powershell', 'systeminfo | find "Boot Time"']);
+        $process->run();
+
+        if (!$process->isSuccessful()) {
+            throw new ProcessFailedException($process);
+        }
+
+        $output = trim($process->getOutput());
+
+        // Extract the uptime from the output
+        $uptime = explode(':', $output);
+        if (count($uptime) > 1) {
+            return trim($uptime[1]);
+        } else {
+            return null;
+        }
+    } else {
+        // For non-Windows systems
+        return null;
+    }
+}
 
 
 

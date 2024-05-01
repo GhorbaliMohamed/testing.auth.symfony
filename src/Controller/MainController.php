@@ -12,7 +12,7 @@ class MainController extends AbstractController
     #[Route('/', name: 'app_main', methods: ['GET', 'POST'])]
     public function index( Request $request): Response
     {   
-        $recaptcha = new ReCaptcha('6LegF80pAAAAAC_qwlwNqZ5k2xNt9dZP2JrFameb');
+        $recaptcha = new ReCaptcha('6LegF80pAAAAAC3C9jou_NWN06_Gc1awIjpDx4te');
         if ($request->isMethod('POST')) {
             $recaptchaResponse = $request->request->get('g-recaptcha-response');
             $recaptchaResult = $recaptcha->verify($recaptchaResponse, $request->getClientIp());
