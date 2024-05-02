@@ -1,0 +1,16 @@
+{# templates/chat/index.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div id="chat-app">
+        <div id="chat-messages">
+            {% for message in messages %}
+                <div>{{ message }}</div>
+            {% endfor %}
+        </div>
+        <form action="{{ path('chat_publish') }}" method="post">
+            <input type="text" name="message" placeholder="Type your message..." />
+            <button type="submit">Send</button>
+        </form>
+    </div>
+{% endblock %}

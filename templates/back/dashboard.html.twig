@@ -1,7 +1,38 @@
-
 {% include "back/base.html.twig" %}
 
 {% block inside %}
+
+<div class="row">
+    <div id="chat-app">
+        <div id="chat-messages"></div>
+        <input type="text" id="chat-input" placeholder="Type your message..." />
+        <button id="chat-send">Send</button>
+    </div>
+    <script>
+            document.addEventListener('DOMContentLoaded', function() {
+            const chatMessages = document.getElementById('chat-messages');
+            const chatInput = document.getElementById('chat-input');
+            const chatSendButton = document.getElementById('chat-send');
+
+            const eventSource = new EventSource('{{ mercure("chat/messages")|escape("js") }}');
+            eventSource.addEventListener('message', (event) => {
+                const data = JSON.parse(event.data);
+                const messageElement = document.createElement('div');
+                messageElement.textContent = data.message;
+                chatMessages.appendChild(messageElement);
+            });
+
+            chatSendButton.addEventListener('click', function() {
+                const message = chatInput.value;
+                fetch('{{ path("chat_publish") }}', {
+                    method: 'POST',
+                    body: new URLSearchParams({ message: message })
+                });
+                chatInput.value = '';
+            });
+        });
+</script>
+</div>
     <div class="row">
         <div class="col-lg-6 grid-margin stretch-card">
             <div class="card">
@@ -29,7 +60,6 @@
         </div>
     </div>
     <br>
-    <br> 
 <div class="row">
         <div class="col-lg-6 grid-margin grid-margin-lg-0 stretch-card">
             <div class="card">
@@ -48,9 +78,36 @@
             </div>
         </div>
     </div>
+{% endblock %}
 
-    <script src="{{ asset('back/vendors/js/vendor.bundle.base.js')}}"></script>
+
+{% include "back/base2.html.twig" %}
+{% block inserthefuckinscipt %}
 <script>
+document.addEventListener('DOMContentLoaded', function() {
+    const chatMessages = document.getElementById('chat-messages');
+    const chatInput = document.getElementById('chat-input');
+    const chatSendButton = document.getElementById('chat-send');
+
+    const eventSource = new EventSource('/chat/publish');
+    eventSource.addEventListener('message', function(event) {
+        const message = JSON.parse(event.data);
+        const messageElement = document.createElement('div');
+        messageElement.textContent = message.message;
+        chatMessages.appendChild(messageElement);
+    });
+
+    chatSendButton.addEventListener('click', function() {
+        const message = chatInput.value;
+        fetch('/chat/publish', {
+            method: 'POST',
+            body: new URLSearchParams({ message: message })
+        });
+        chatInput.value = '';
+    });
+});
+</script>
+    <script>
 $(function() {
 
     var chartData = {
@@ -138,7 +195,5 @@ $(function() {
     }
 });
 </script>
+<script src="{{ asset('chat.js') }}"></script>
 {% endblock %}
-
-
-{% include "back/base2.html.twig" %}
